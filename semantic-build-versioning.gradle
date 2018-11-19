@@ -1,0 +1,10 @@
+preRelease {
+    startingVersion = 'alpha'
+    bump = {
+        if (it == "alpha") {
+            "alpha1"
+        } else {
+            "alpha${((it - ~/^alpha/) as int) + 1}"
+        }
+    }
+}

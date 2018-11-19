@@ -67,14 +67,14 @@ tasks {
     jar {
         manifest.attributes(
             mapOf(
-                "Main-Class" to "com.example.AppKt"
+                "Main-Class" to "com.mahdialkhalaf.tools.AppKt"
             )
         )
     }
 
     shadowJar {
         mustRunAfter(embedApplicationManifest)
-        archiveName = "${project.name}.jar"
+//        archiveName = "${project.name}.jar"
     }
 
     fxlauncher {

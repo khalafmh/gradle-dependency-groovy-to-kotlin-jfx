@@ -32,12 +32,18 @@ class View : tornadofx.View("Gradle Groovy to Kotlin Dependency Migrator") {
 
 
     private fun migrate(dependency: String): String {
-        val regex = Regex("compile group: '(.+)', name: '(.+)', version: '(.+)'")
+        val regex = Regex("(?<scope>\\w+) group: '(?<group>.+)', name: '(?<name>.+)', version: '(?<version>.+)'")
         if (!dependency.matches(regex)) {
             return dependency
         }
-        regex.matchEntire(dependency)?.groupValues
-        val values = regex.matchEntire(dependency)?.destructured?.toList() ?: throw IllegalStateException()
-        return "implementation(group = \"${values[0]}\", name = \"${values[1]}\", version = \"${values[2]}\")"
+        val values = regex.matchEntire(dependency)?.groups ?: throw IllegalStateException()
+        val scope = when (values["scope"]?.value) {
+            "compile" -> "implementation"
+            "testCompile" -> "testImplementation"
+            "api" -> "api"
+            "testApi" -> "testApi"
+            else -> values["scope"]?.value
+        }
+        return "$scope(group = \"${values["group"]?.value}\", name = \"${values["name"]?.value}\", version = \"${values["version"]?.value}\")"
     }
 }

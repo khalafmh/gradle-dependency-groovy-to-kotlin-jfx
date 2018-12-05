@@ -60,7 +60,7 @@ tasks.withType<KotlinCompile> {
 
 tasks {
     named<Wrapper>("wrapper") {
-        gradleVersion = "5.0-rc-2"
+        gradleVersion = "5.0"
         distributionType = Wrapper.DistributionType.ALL
     }
 

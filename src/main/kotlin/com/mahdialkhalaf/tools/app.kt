@@ -58,10 +58,20 @@ class View : tornadofx.View("Gradle Groovy to Kotlin Dependency Migrator") {
 
 
     private fun migrate(dependency: String, style: Style = Style.NAMED): String {
-        val regex =
-            Regex("\\s*(?<configuration>\\w+)\\s+group:\\s+[\"'](?<group>.+)[\"'],\\s+name:\\s+[\"'](?<name>.+)[\"'],\\s+version:\\s+[\"'](?<version>.+)[\"']")
-        val regex2 =
-            Regex("\\s*(?<configuration>\\w+)\\s+(?<quote>[\"'])(?<group>.+):(?<name>.+):(?<version>.+)\\k<quote>")
+        // fromat similar to: implementation group: "com.example", name: "artifact", version: "1.0"
+        val regex = Regex(
+            "\\s*(?<configuration>\\w+)\\s+" +
+                    "group:\\s+[\"'](?<group>.+)[\"'],\\s+" +
+                    "name:\\s+[\"'](?<name>.+)[\"'],\\s+" +
+                    "version:\\s+(?<version>\\S+)"
+        )
+        // format similar to: implementation "com.example:artifact:1.0"
+        val regex2 = Regex(
+            "\\s*(?<configuration>\\w+)\\s+" +
+                    "(?<quote>[\"'])" +
+                    "(?<group>.+):(?<name>.+):(?<version>.+)" +
+                    "\\k<quote>"
+        )
         if (!dependency.matches(regex) && !dependency.matches(regex2)) {
             return dependency
         }
